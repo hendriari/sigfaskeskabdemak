@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="../assetsmap2/css/leaflet.css">
+        <link rel="stylesheet" href="../assetsmap2/css/qgis2web.css"><link rel="stylesheet" href="../assetsmap2/css/fontawesome-all.min.css">
+        <style>
+        #map {
+            width: 1110px;
+            height: 580px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="../assetsmap2/js/qgis2web_expressions.js"></script>
+        <script src="../assetsmap2/js/leaflet.js"></script>
+        <script src="../assetsmap2/js/leaflet.rotatedMarker.js"></script>
+        <script src="../assetsmap2/js/leaflet.pattern.js"></script>
+        <script src="../assetsmap2/js/leaflet-hash.js"></script>
+        <script src="../assetsmap2/js/Autolinker.min.js"></script>
+        <script src="../assetsmap2/js/rbush.min.js"></script>
+        <script src="../assetsmap2/js/labelgun.min.js"></script>
+        <script src="../assetsmap2/js/labels.js"></script>
+        <script src="../assetsmap2/data/Batas_Kecamatan_Demak_1.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-7.164777652149941,110.28699021567913],[-6.702753013573774,111.20366977467013]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleMaps_0');
+        map.getPane('pane_GoogleMaps_0').style.zIndex = 400;
+        var layer_GoogleMaps_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleMaps_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleMaps_0;
+        map.addLayer(layer_GoogleMaps_0);
+        function pop_Batas_Kecamatan_Demak_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Kecamatan</th>\
+                        <td>' + (feature.properties['Kecamatan'] !== null ? autolinker.link(feature.properties['Kecamatan'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kabupaten</th>\
+                        <td>' + (feature.properties['Kabupaten'] !== null ? autolinker.link(feature.properties['Kabupaten'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Provinsi</th>\
+                        <td>' + (feature.properties['Provinsi'] !== null ? autolinker.link(feature.properties['Provinsi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">RS</th>\
+                        <td>' + (feature.properties['RS'] !== null ? autolinker.link(feature.properties['RS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Puskesmas</th>\
+                        <td>' + (feature.properties['Puskesmas'] !== null ? autolinker.link(feature.properties['Puskesmas'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Klinik</th>\
+                        <td>' + (feature.properties['Klinik'] !== null ? autolinker.link(feature.properties['Klinik'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Dr. Prakte</th>\
+                        <td>' + (feature.properties['Dr. Prakte'] !== null ? autolinker.link(feature.properties['Dr. Prakte'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Dr. Gigi</th>\
+                        <td>' + (feature.properties['Dr. Gigi'] !== null ? autolinker.link(feature.properties['Dr. Gigi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Apotek</th>\
+                        <td>' + (feature.properties['Apotek'] !== null ? autolinker.link(feature.properties['Apotek'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">T. Faskes</th>\
+                        <td>' + (feature.properties['T. Faskes'] !== null ? autolinker.link(feature.properties['T. Faskes'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Batas_Kecamatan_Demak_1_0(feature) {
+            if (feature.properties['T. Faskes'] >= 2.000000 && feature.properties['T. Faskes'] <= 3.000000 ) {
+                return {
+                pane: 'pane_Batas_Kecamatan_Demak_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['T. Faskes'] >= 3.000000 && feature.properties['T. Faskes'] <= 5.000000 ) {
+                return {
+                pane: 'pane_Batas_Kecamatan_Demak_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,213,213,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['T. Faskes'] >= 5.000000 && feature.properties['T. Faskes'] <= 7.000000 ) {
+                return {
+                pane: 'pane_Batas_Kecamatan_Demak_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,170,170,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['T. Faskes'] >= 7.000000 && feature.properties['T. Faskes'] <= 9.000000 ) {
+                return {
+                pane: 'pane_Batas_Kecamatan_Demak_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,128,128,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['T. Faskes'] >= 9.000000 && feature.properties['T. Faskes'] <= 14.000000 ) {
+                return {
+                pane: 'pane_Batas_Kecamatan_Demak_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,79,79,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['T. Faskes'] >= 14.000000 && feature.properties['T. Faskes'] <= 22.000000 ) {
+                return {
+                pane: 'pane_Batas_Kecamatan_Demak_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(192,32,32,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Batas_Kecamatan_Demak_1');
+        map.getPane('pane_Batas_Kecamatan_Demak_1').style.zIndex = 401;
+        map.getPane('pane_Batas_Kecamatan_Demak_1').style['mix-blend-mode'] = 'normal';
+        var layer_Batas_Kecamatan_Demak_1 = new L.geoJson(json_Batas_Kecamatan_Demak_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Batas_Kecamatan_Demak_1',
+            layerName: 'layer_Batas_Kecamatan_Demak_1',
+            pane: 'pane_Batas_Kecamatan_Demak_1',
+            onEachFeature: pop_Batas_Kecamatan_Demak_1,
+            style: style_Batas_Kecamatan_Demak_1_0,
+        });
+        bounds_group.addLayer(layer_Batas_Kecamatan_Demak_1);
+        map.addLayer(layer_Batas_Kecamatan_Demak_1);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Batas_Kecamatan_Demak<br /><table><tr><td style="text-align: center;"><img src="../assetsmap2/legend/Batas_Kecamatan_Demak_1_Tersedia23Layanan0.png" /></td><td>Tersedia 2 - 3 Layanan</td></tr><tr><td style="text-align: center;"><img src="../assetsmap2/legend/Batas_Kecamatan_Demak_1_Tersedia45Layanan1.png" /></td><td>Tersedia 4 - 5 Layanan</td></tr><tr><td style="text-align: center;"><img src="../assetsmap2/legend/Batas_Kecamatan_Demak_1_Tersedia67Layanan2.png" /></td><td>Tersedia 6 - 7 Layanan</td></tr><tr><td style="text-align: center;"><img src="../assetsmap2/legend/Batas_Kecamatan_Demak_1_Tersedia89Layanan3.png" /></td><td>Tersedia 8 - 9 Layanan</td></tr><tr><td style="text-align: center;"><img src="../assetsmap2/legend/Batas_Kecamatan_Demak_1_Tersedia1014Layanan4.png" /></td><td>Tersedia 10 - 14 Layanan</td></tr><tr><td style="text-align: center;"><img src="../assetsmap2/legend/Batas_Kecamatan_Demak_1_Tersedia22Layanan5.png" /></td><td>Tersedia 22 Layanan</td></tr></table>': layer_Batas_Kecamatan_Demak_1,"Google Maps": layer_GoogleMaps_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_Batas_Kecamatan_Demak_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Kecamatan'] !== null?String('<div style="color: #323232; font-size: 10pt; font-family: \'Arial\', sans-serif;">' + layer.feature.properties['Kecamatan']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_Batas_Kecamatan_Demak_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        resetLabels([layer_Batas_Kecamatan_Demak_1]);
+        map.on("zoomend", function(){
+            resetLabels([layer_Batas_Kecamatan_Demak_1]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_Batas_Kecamatan_Demak_1]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_Batas_Kecamatan_Demak_1]);
+        });
+        </script>
+    </body>
+</html>

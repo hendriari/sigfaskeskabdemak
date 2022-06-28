@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="../assetsmap1/css/leaflet.css">
+        <link rel="stylesheet" href="../assetsmap1/css/qgis2web.css"><link rel="stylesheet" href="../assetsmap1/css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="../assetsmap1/js/qgis2web_expressions.js"></script>
+        <script src="../assetsmap1/js/leaflet.js"></script>
+        <script src="../assetsmap1/js/leaflet.rotatedMarker.js"></script>
+        <script src="../assetsmap1/js/leaflet.pattern.js"></script>
+        <script src="../assetsmap1/js/leaflet-hash.js"></script>
+        <script src="../assetsmap1/js/Autolinker.min.js"></script>
+        <script src="../assetsmap1/js/rbush.min.js"></script>
+        <script src="../assetsmap1/js/labelgun.min.js"></script>
+        <script src="../assetsmap1/js/labels.js"></script>
+        <script src="../assetsmap1/data/BatasKecamatanKabDemak_1.js"></script>
+        <script src="../assetsmap1/data/dokterpraktekperorangandemak_2.js"></script>
+        <script src="../assetsmap1/data/klinikkabdemak2022_3.js"></script>
+        <script src="../assetsmap1/data/apoteksarihusadademak_4.js"></script>
+        <script src="../assetsmap1/data/puskesmasdemak2022_5.js"></script>
+        <script src="../assetsmap1/data/doktergigidemak2022_6.js"></script>
+        <script src="../assetsmap1/data/rumahsakitdemak2022_7.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-7.025670003644787,110.4476731830518],[-6.764581076872991,110.86797830197769]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_GoogleMaps_0');
+        map.getPane('pane_GoogleMaps_0').style.zIndex = 400;
+        var layer_GoogleMaps_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleMaps_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleMaps_0;
+        map.addLayer(layer_GoogleMaps_0);
+        function pop_BatasKecamatanKabDemak_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Kelurahan</th>\
+                        <td>' + (feature.properties['Kelurahan'] !== null ? autolinker.link(feature.properties['Kelurahan'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kecamatan</th>\
+                        <td>' + (feature.properties['Kecamatan'] !== null ? autolinker.link(feature.properties['Kecamatan'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kabupaten</th>\
+                        <td>' + (feature.properties['Kabupaten'] !== null ? autolinker.link(feature.properties['Kabupaten'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Provinsi</th>\
+                        <td>' + (feature.properties['Provinsi'] !== null ? autolinker.link(feature.properties['Provinsi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jml. Faskes</th>\
+                        <td>' + (feature.properties['Jml. Faskes'] !== null ? autolinker.link(feature.properties['Jml. Faskes'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_BatasKecamatanKabDemak_1_0(feature) {
+            switch(String(feature.properties['Kecamatan'])) {
+                case 'Bonang':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,0,21,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Demak':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(209,166,185,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Dempet':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(176,37,222,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Gajah':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(145,171,220,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Guntur':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(210,49,207,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Karanganyar':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(238,175,73,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Karangawen':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(144,217,128,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Karangtengah':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,240,78,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Kebonagung':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(206,202,169,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Mijen':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(203,66,28,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Mranggen':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(231,71,100,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Sayung':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(94,159,206,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Wedung':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(62,210,94,1.0)',
+                interactive: true,
+            }
+                    break;
+                case 'Wonosalam':
+                    return {
+                pane: 'pane_BatasKecamatanKabDemak_1',
+                opacity: 1,
+                color: 'rgba(0,0,0,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(58,214,217,1.0)',
+                interactive: true,
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_BatasKecamatanKabDemak_1');
+        map.getPane('pane_BatasKecamatanKabDemak_1').style.zIndex = 401;
+        map.getPane('pane_BatasKecamatanKabDemak_1').style['mix-blend-mode'] = 'normal';
+        var layer_BatasKecamatanKabDemak_1 = new L.geoJson(json_BatasKecamatanKabDemak_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_BatasKecamatanKabDemak_1',
+            layerName: 'layer_BatasKecamatanKabDemak_1',
+            pane: 'pane_BatasKecamatanKabDemak_1',
+            onEachFeature: pop_BatasKecamatanKabDemak_1,
+            style: style_BatasKecamatanKabDemak_1_0,
+        });
+        bounds_group.addLayer(layer_BatasKecamatanKabDemak_1);
+        map.addLayer(layer_BatasKecamatanKabDemak_1);
+        function pop_dokterpraktekperorangandemak_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Dr.Praktek</th>\
+                        <td>' + (feature.properties['Dr.Praktek'] !== null ? autolinker.link(feature.properties['Dr.Praktek'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Alamat</th>\
+                        <td>' + (feature.properties['Alamat'] !== null ? autolinker.link(feature.properties['Alamat'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telepon</th>\
+                        <td>' + (feature.properties['Telepon'] !== null ? autolinker.link(feature.properties['Telepon'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">y</th>\
+                        <td>' + (feature.properties['y'] !== null ? autolinker.link(feature.properties['y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">x</th>\
+                        <td>' + (feature.properties['x'] !== null ? autolinker.link(feature.properties['x'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_dokterpraktekperorangandemak_2_0() {
+            return {
+                pane: 'pane_dokterpraktekperorangandemak_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: '../assetsmap1/markers/drperorang.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_dokterpraktekperorangandemak_2');
+        map.getPane('pane_dokterpraktekperorangandemak_2').style.zIndex = 402;
+        map.getPane('pane_dokterpraktekperorangandemak_2').style['mix-blend-mode'] = 'normal';
+        var layer_dokterpraktekperorangandemak_2 = new L.geoJson(json_dokterpraktekperorangandemak_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_dokterpraktekperorangandemak_2',
+            layerName: 'layer_dokterpraktekperorangandemak_2',
+            pane: 'pane_dokterpraktekperorangandemak_2',
+            onEachFeature: pop_dokterpraktekperorangandemak_2,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_dokterpraktekperorangandemak_2_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_dokterpraktekperorangandemak_2);
+        map.addLayer(layer_dokterpraktekperorangandemak_2);
+        function pop_klinikkabdemak2022_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Klinik</th>\
+                        <td>' + (feature.properties['Klinik'] !== null ? autolinker.link(feature.properties['Klinik'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Alamat</th>\
+                        <td>' + (feature.properties['Alamat'] !== null ? autolinker.link(feature.properties['Alamat'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telepon</th>\
+                        <td>' + (feature.properties['Telepon'] !== null ? autolinker.link(feature.properties['Telepon'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">y</th>\
+                        <td>' + (feature.properties['y'] !== null ? autolinker.link(feature.properties['y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">x</th>\
+                        <td>' + (feature.properties['x'] !== null ? autolinker.link(feature.properties['x'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_klinikkabdemak2022_3_0() {
+            return {
+                pane: 'pane_klinikkabdemak2022_3',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: '../assetsmap1/markers/drorg.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_klinikkabdemak2022_3');
+        map.getPane('pane_klinikkabdemak2022_3').style.zIndex = 403;
+        map.getPane('pane_klinikkabdemak2022_3').style['mix-blend-mode'] = 'normal';
+        var layer_klinikkabdemak2022_3 = new L.geoJson(json_klinikkabdemak2022_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_klinikkabdemak2022_3',
+            layerName: 'layer_klinikkabdemak2022_3',
+            pane: 'pane_klinikkabdemak2022_3',
+            onEachFeature: pop_klinikkabdemak2022_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_klinikkabdemak2022_3_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_klinikkabdemak2022_3);
+        map.addLayer(layer_klinikkabdemak2022_3);
+        function pop_apoteksarihusadademak_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Apotek</th>\
+                        <td>' + (feature.properties['Apotek'] !== null ? autolinker.link(feature.properties['Apotek'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Alamat</th>\
+                        <td>' + (feature.properties['Alamat'] !== null ? autolinker.link(feature.properties['Alamat'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telepon</th>\
+                        <td>' + (feature.properties['Telepon'] !== null ? autolinker.link(feature.properties['Telepon'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">y</th>\
+                        <td>' + (feature.properties['y'] !== null ? autolinker.link(feature.properties['y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">x</th>\
+                        <td>' + (feature.properties['x'] !== null ? autolinker.link(feature.properties['x'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_apoteksarihusadademak_4_0() {
+            return {
+                pane: 'pane_apoteksarihusadademak_4',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: '../assetsmap1/markers/afotek.svg',
+            iconSize: [24.32, 24.32]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_apoteksarihusadademak_4');
+        map.getPane('pane_apoteksarihusadademak_4').style.zIndex = 404;
+        map.getPane('pane_apoteksarihusadademak_4').style['mix-blend-mode'] = 'normal';
+        var layer_apoteksarihusadademak_4 = new L.geoJson(json_apoteksarihusadademak_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_apoteksarihusadademak_4',
+            layerName: 'layer_apoteksarihusadademak_4',
+            pane: 'pane_apoteksarihusadademak_4',
+            onEachFeature: pop_apoteksarihusadademak_4,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_apoteksarihusadademak_4_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_apoteksarihusadademak_4);
+        map.addLayer(layer_apoteksarihusadademak_4);
+        function pop_puskesmasdemak2022_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Puskesmas</th>\
+                        <td>' + (feature.properties['Puskesmas'] !== null ? autolinker.link(feature.properties['Puskesmas'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Kode</th>\
+                        <td>' + (feature.properties['Kode'] !== null ? autolinker.link(feature.properties['Kode'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jenis Pus.</th>\
+                        <td>' + (feature.properties['Jenis Pus.'] !== null ? autolinker.link(feature.properties['Jenis Pus.'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Alamat</th>\
+                        <td>' + (feature.properties['Alamat'] !== null ? autolinker.link(feature.properties['Alamat'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">y</th>\
+                        <td>' + (feature.properties['y'] !== null ? autolinker.link(feature.properties['y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">x</th>\
+                        <td>' + (feature.properties['x'] !== null ? autolinker.link(feature.properties['x'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_puskesmasdemak2022_5_0() {
+            return {
+                pane: 'pane_puskesmasdemak2022_5',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: '../assetsmap1/markers/psksmsss.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_puskesmasdemak2022_5');
+        map.getPane('pane_puskesmasdemak2022_5').style.zIndex = 405;
+        map.getPane('pane_puskesmasdemak2022_5').style['mix-blend-mode'] = 'normal';
+        var layer_puskesmasdemak2022_5 = new L.geoJson(json_puskesmasdemak2022_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_puskesmasdemak2022_5',
+            layerName: 'layer_puskesmasdemak2022_5',
+            pane: 'pane_puskesmasdemak2022_5',
+            onEachFeature: pop_puskesmasdemak2022_5,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_puskesmasdemak2022_5_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_puskesmasdemak2022_5);
+        map.addLayer(layer_puskesmasdemak2022_5);
+        function pop_doktergigidemak2022_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Dr. Gigi</th>\
+                        <td>' + (feature.properties['Dr. Gigi'] !== null ? autolinker.link(feature.properties['Dr. Gigi'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Alamat</th>\
+                        <td>' + (feature.properties['Alamat'] !== null ? autolinker.link(feature.properties['Alamat'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telepon</th>\
+                        <td>' + (feature.properties['Telepon'] !== null ? autolinker.link(feature.properties['Telepon'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">y</th>\
+                        <td>' + (feature.properties['y'] !== null ? autolinker.link(feature.properties['y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">x</th>\
+                        <td>' + (feature.properties['x'] !== null ? autolinker.link(feature.properties['x'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_doktergigidemak2022_6_0() {
+            return {
+                pane: 'pane_doktergigidemak2022_6',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: '../assetsmap1/markers/drggg.svg',
+            iconSize: [20.075856, 20.075856]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_doktergigidemak2022_6');
+        map.getPane('pane_doktergigidemak2022_6').style.zIndex = 406;
+        map.getPane('pane_doktergigidemak2022_6').style['mix-blend-mode'] = 'normal';
+        var layer_doktergigidemak2022_6 = new L.geoJson(json_doktergigidemak2022_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_doktergigidemak2022_6',
+            layerName: 'layer_doktergigidemak2022_6',
+            pane: 'pane_doktergigidemak2022_6',
+            onEachFeature: pop_doktergigidemak2022_6,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_doktergigidemak2022_6_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_doktergigidemak2022_6);
+        map.addLayer(layer_doktergigidemak2022_6);
+        function pop_rumahsakitdemak2022_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">RS</th>\
+                        <td>' + (feature.properties['RS'] !== null ? autolinker.link(feature.properties['RS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Alamat RS</th>\
+                        <td>' + (feature.properties['Alamat RS'] !== null ? autolinker.link(feature.properties['Alamat RS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Telepon RS</th>\
+                        <td>' + (feature.properties['Telepon RS'] !== null ? autolinker.link(feature.properties['Telepon RS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">y</th>\
+                        <td>' + (feature.properties['y'] !== null ? autolinker.link(feature.properties['y'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">x</th>\
+                        <td>' + (feature.properties['x'] !== null ? autolinker.link(feature.properties['x'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_rumahsakitdemak2022_7_0() {
+            return {
+                pane: 'pane_rumahsakitdemak2022_7',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: '../assetsmap1/markers/rmhskt.svg',
+            iconSize: [27.36, 27.36]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_rumahsakitdemak2022_7');
+        map.getPane('pane_rumahsakitdemak2022_7').style.zIndex = 407;
+        map.getPane('pane_rumahsakitdemak2022_7').style['mix-blend-mode'] = 'normal';
+        var layer_rumahsakitdemak2022_7 = new L.geoJson(json_rumahsakitdemak2022_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_rumahsakitdemak2022_7',
+            layerName: 'layer_rumahsakitdemak2022_7',
+            pane: 'pane_rumahsakitdemak2022_7',
+            onEachFeature: pop_rumahsakitdemak2022_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_rumahsakitdemak2022_7_0(feature));
+            },
+        });
+        bounds_group.addLayer(layer_rumahsakitdemak2022_7);
+        map.addLayer(layer_rumahsakitdemak2022_7);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'<img src="../assetsmap1/legend/rumahsakitdemak2022_7.png" /> rumah sakit demak 2022': layer_rumahsakitdemak2022_7,'<img src="../assetsmap1/legend/doktergigidemak2022_6.png" /> dokter gigi demak 2022': layer_doktergigidemak2022_6,'<img src="../assetsmap1/legend/puskesmasdemak2022_5.png" /> puskesmas demak 2022': layer_puskesmasdemak2022_5,'<img src="../assetsmap1/legend/apoteksarihusadademak_4.png" /> apotek sarihusada demak': layer_apoteksarihusadademak_4,'<img src="../assetsmap1/legend/klinikkabdemak2022_3.png" /> klinik kab demak 2022': layer_klinikkabdemak2022_3,'<img src="../assetsmap1/legend/dokterpraktekperorangandemak_2.png" /> dokter praktek per orangan demak': layer_dokterpraktekperorangandemak_2,'Batas Kecamatan Kab. Demak<br /><table><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Bonang0.png" /></td><td>Bonang</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Demak1.png" /></td><td>Demak</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Dempet2.png" /></td><td>Dempet</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Gajah3.png" /></td><td>Gajah</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Guntur4.png" /></td><td>Guntur</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Karanganyar5.png" /></td><td>Karanganyar</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Karangawen6.png" /></td><td>Karangawen</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Karangtengah7.png" /></td><td>Karangtengah</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Kebonagung8.png" /></td><td>Kebonagung</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Mijen9.png" /></td><td>Mijen</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Mranggen10.png" /></td><td>Mranggen</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Sayung11.png" /></td><td>Sayung</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Wedung12.png" /></td><td>Wedung</td></tr><tr><td style="text-align: center;"><img src="../assetsmap1/legend/BatasKecamatanKabDemak_1_Wonosalam13.png" /></td><td>Wonosalam</td></tr></table>': layer_BatasKecamatanKabDemak_1,"Google Maps": layer_GoogleMaps_0,}).addTo(map);
+        setBounds();
+        var i = 0;
+        layer_BatasKecamatanKabDemak_1.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['Kelurahan'] !== null?String('<div style="color: #000000; font-size: 8pt; font-family: \'MS Shell Dlg 2\', sans-serif;">' + layer.feature.properties['Kelurahan']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_BatasKecamatanKabDemak_1'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        resetLabels([layer_BatasKecamatanKabDemak_1]);
+        map.on("zoomend", function(){
+            resetLabels([layer_BatasKecamatanKabDemak_1]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_BatasKecamatanKabDemak_1]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_BatasKecamatanKabDemak_1]);
+        });
+        </script>
+    </body>
+</html>
